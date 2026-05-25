@@ -6,6 +6,8 @@ Documentar el estado actual de la integración entre el ERP, la base Firebird y 
 ## Estado actual conocido
 Actualmente los contratos se sincronizan desde el ERP hacia Zoho CRM en un módulo específico de contratos.
 
+La integración fue realizada por un proveedor de desarrollo. La empresa cuenta con acceso a los códigos de integración en Zoho, swagger del ERP, credenciales de conexión y conexiones nativas configuradas.
+
 ## Información disponible en el módulo de contratos
 Campos sincronizados actualmente:
 - Número de contrato.
@@ -30,7 +32,26 @@ Información pendiente o requerida:
 - Referencia de remito, devolución o cambio de mercadería, si aplica.
 
 ## Riesgo principal
-Si Zoho Forms solo puede consultar el módulo de contratos con información básica, el usuario de bodega podría seleccionar el contrato, pero tendría que ingresar manualmente el equipo. Esto reduce la confiabilidad del registro y puede generar errores de trazabilidad.
+Si Zoho Forms solo puede consultar el módulo de contratos con información básica, el usuario de bodega podría seleccionar el contrato, pero tendría que ingresar manualmente el equipo. Esto permite avanzar, pero reduce la confiabilidad del registro y puede generar errores de trazabilidad si no se controla.
+
+## Estrategia aprobada por fases
+
+### Fase 1: Captura manual controlada
+Durante el desarrollo inicial se permitirá la captura manual del equipo para no retrasar el avance funcional.
+
+Esta fase sirve para validar:
+- Formulario.
+- Checklist.
+- Carga multimedia.
+- Almacenamiento en Google Drive.
+- Consulta de historial en Zoho.
+- Aceptación operativa por bodega y cartera.
+
+### Fase 2: Catálogo intermedio provisional
+Para las primeras pruebas en producción se evaluará un catálogo intermedio de equipos por contrato, reduciendo captura manual sin depender todavía de una sincronización completa.
+
+### Fase 3: Ampliación de sincronización hacia Zoho CRM
+El objetivo final será ampliar la sincronización hacia Zoho CRM para incluir la relación contrato-equipo, una vez que la solución sea validada como funcional.
 
 ## Opciones de solución
 
@@ -54,11 +75,12 @@ Permitir que bodega ingrese o seleccione manualmente el equipo dentro del formul
 Ventajas:
 - Más rápido de implementar.
 - Menor dependencia inicial de integración.
+- Útil para validar el flujo durante el desarrollo.
 
 Riesgos:
 - Mayor posibilidad de errores.
 - Menor trazabilidad.
-- Dificulta búsquedas históricas confiables por equipo.
+- Dificulta búsquedas históricas confiables por equipo si se mantiene como solución definitiva.
 
 ### Opción C: Catálogo intermedio de equipos por contrato
 Crear o alimentar una estructura intermedia en Zoho con los equipos activos por contrato, aunque no sea una réplica completa del ERP.
@@ -67,20 +89,26 @@ Ventajas:
 - Puede ser más simple que sincronizar todos los movimientos.
 - Permite que Zoho Forms filtre mejor la selección.
 - Mantiene el ERP como fuente principal.
+- Sirve como puente entre captura manual y sincronización final.
 
 Riesgos:
 - Requiere definir frecuencia de actualización.
 - Requiere reglas claras de vigencia.
+- No debe convertirse en solución final sin control formal.
 
-## Recomendación inicial
-La opción recomendada es ampliar la sincronización para que Zoho CRM tenga al menos la relación contrato-equipo necesaria para el formulario. No se recomienda depender de captura manual de equipo como solución final, salvo para una prueba piloto controlada.
+## Recomendación actualizada
+La estrategia recomendada es avanzar por fases:
+
+1. Captura manual controlada para acelerar desarrollo.
+2. Catálogo intermedio para pruebas iniciales en producción.
+3. Ampliación de sincronización hacia Zoho CRM como solución final.
 
 ## Decisión pendiente
-Definir si los equipos asociados al contrato se sincronizarán como:
+Definir si los equipos asociados al contrato se sincronizarán finalmente como:
 - Módulo propio de equipos contratados.
 - Registros relacionados dentro del módulo de contratos.
 - Subformulario dentro del contrato.
 - Catálogo intermedio consultable desde Zoho Forms.
 
 ## Pregunta clave pendiente
-¿El ERP permite extraer de forma confiable los equipos activos o vinculados a cada contrato desde Firebird para sincronizarlos hacia Zoho CRM?
+¿El ERP permite extraer de forma confiable los equipos activos o vinculados a cada contrato desde Firebird o desde el swagger del ERP para sincronizarlos hacia Zoho CRM?
